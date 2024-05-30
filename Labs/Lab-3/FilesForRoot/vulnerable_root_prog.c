@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
      * Once the program has made sure that the real user indeed has the right, the program opens the file and writes the user input into the file.
      *
      **/
-
+    
     if (!access(fileName, W_OK))
-    {
+    {	seteuid(getuid());
         printf("Access Granted \n");
         /*Simulating the Delay*/
         sleep(DELAY); // sleep for 1 secs
