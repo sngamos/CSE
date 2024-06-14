@@ -142,7 +142,11 @@ class Banker:
         # DO NOT PRINT ANYTHING ELSE
 
         ### BEGIN ANSWER HERE ###
-        safe = True  # Change this line
+        available_copy = deepcopy(self.available)
+        need_copy = deepcopy(self.need)
+        allocation_copy = deepcopy(self.allocation)
+
+        safe = self.check_safe(customer_index,request,available_copy,need_copy,allocation_copy)  # Change this line
 
         ### END OF TASK 1 ###
 
@@ -219,8 +223,31 @@ class Banker:
         # DO NOT PRINT ANYTHING ELSE
 
         ### BEGIN ANSWER HERE ###
-        safe = True  # Change this line according to whether the request will be safe or not
+        #step 1: Initialize finish list
+        finish = [False] * self.N
+        for i in range(self.M):
+            work[i] -=request[i]
+            need[customer_index][i] -= request[i]
+            allocation[customer_index][i] += request[i]
+        
+        #step 2: Find index i such that both finish[i] == False, need[i] <= work
+        while True:
+            found = False
+            for i in range(self.N):
+                if not finish[i]:
+                    if all(need[i][j] <= work[j] for j in range(self.M)):
+                        for j in range(self.M):
+                            work[j] += allocation[i][j]
+                        finish[i] = True
+                        found = True
 
+            if not found:
+                break
+
+        if all(finish):
+            safe = True # Change this line according to whether the request will be safe or not
+        else:
+            safe = False
         ### END OF TASK 2 ###
 
         bank_lock.release()
