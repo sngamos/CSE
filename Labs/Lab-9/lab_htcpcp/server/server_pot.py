@@ -235,12 +235,13 @@ def ensure_request_is_valid(url, content_type, method, connection, requested_pot
         send_error_message(connection, b"HTCPCP/1.1 418 I'm a teapot\r\n\r\n")
         return False
     if method not in accepted_methods:
-        send_error_message(connection, b"HTCPCP/1.1 405 Method Not Implemented\r\n\r\n")
+        send_error_message(connection, b"HTCPCP/1.1 501 Method Not Implemented\r\n\r\n")
         return False
     if "Content-Type: application/coffee-pot-command" not in content_type:
         send_error_message(connection, b"HTCPCP/1.1 415 Unsupported Media Type\r\n\r\n")
         return False
     urlToken = url.split("://")
+    #print(urlToken)
     if urlToken[1] != "ducky":
         send_error_message(connection, not_found_message)
         return False
